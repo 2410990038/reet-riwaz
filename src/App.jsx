@@ -15,7 +15,10 @@ import Checkout from "./pages/Checkout";
 import Payment from "./pages/Payment";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import OrderHistory from "./pages/OrderHistory";
+import Wishlist from "./pages/Wishlist";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
+import { WishlistProvider } from "./context/WishlistContext";
+import WomensCollection from "./components/WomensCollection";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -33,30 +36,35 @@ export default function App() {
   return (
     <Router>
       <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-        <Navbar
-          onLoginClick={openLogin}
-          isLoggedIn={isLoggedIn}
-          onLogout={() => setIsLoggedIn(false)}
-        />
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<LoginModal />} />
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/buynow" element={<BuyNow />} />
-          <Route path="/user-profile" element={<ManageAccount />} />
-          <Route path="/fittings" element={<Fittings />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/payment" element={<Payment />} />
-          <Route path="/order-confirmation" element={<OrderConfirmation />} />
-          <Route path="/orders" element={<OrderHistory />} />
-          <Route path="/sign-in" element={
-  <div className="min-h-screen bg-[#fdfbe8] flex items-center justify-center pt-16">
-    <SignIn routing="path" path="/sign-in" afterSignInUrl="/shop" />
-  </div>
-} />
-<Route path="/admin" element={<AdminPanel />} />
-        </Routes>
+        <WishlistProvider>
+          
+          <Navbar
+            onLoginClick={openLogin}
+            isLoggedIn={isLoggedIn}
+            onLogout={() => setIsLoggedIn(false)}
+          />
+          <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<LoginModal />} />
+            <Route path="/shop" element={<Shop />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/buynow" element={<BuyNow />} />
+            <Route path="/user-profile" element={<ManageAccount />} />
+            <Route path="/fittings" element={<Fittings />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/payment" element={<Payment />} />
+            <Route path="/order-confirmation" element={<OrderConfirmation />} />
+            <Route path="/orders" element={<OrderHistory />} />
+            <Route path="/wishlist" element={<Wishlist />} />
+            <Route path="/sign-in" element={
+              <div className="min-h-screen bg-[#fdfbe8] flex items-center justify-center pt-16">
+                <SignIn routing="path" path="/sign-in" afterSignInUrl="/shop" />
+              </div>
+            } />
+            <Route path="/admin" element={<AdminPanel />} />
+            <Route path="/women" element={<WomensCollection />} />
+          </Routes>
+        </WishlistProvider>
       </ClerkProvider>
     </Router>
   );

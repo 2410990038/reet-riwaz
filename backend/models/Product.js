@@ -7,7 +7,9 @@ const productSchema = new mongoose.Schema({
   rating: { type: Number, default: 4.5 },
   desc: { type: String },
   image: { type: String },
-  category: { type: String, enum: ['women', 'men', 'kids'], required: true }
+  category: { type: String, enum: ['women', 'men', 'kids'], required: true },
+  stock: { type: Number, default: 10 },
+  inStock: { type: Boolean, default: true }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Product', productSchema);

@@ -63,20 +63,15 @@
 //     </div>
 //   );
 // }
-import { useState } from "react";
 import { useCart } from "../context/CartContext";
-import ShopByCategory from "../components/ShopbyCategory";
-import ExploreByOccasion from "../components/ExplorebyOccasion";
-import ExploreByRegion from "../components/ExploreByRegion";
+import WomensCollection from "../components/WomensCollection";
 
 export default function Shop() {
-  const { cart } = useCart(); // get cart items
+  const { cart } = useCart();
 
   return (
     <div className="pt-18">
-      <ShopByCategory />
-      <ExploreByOccasion />
-      <ExploreByRegion />
+      <WomensCollection />
 
       {/* 🛍️ Added Items Section */}
       {cart.length > 0 && (
@@ -102,4 +97,3 @@ export default function Shop() {
     </div>
   );
 }
-
