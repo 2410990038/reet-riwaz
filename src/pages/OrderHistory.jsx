@@ -3,7 +3,7 @@ import { useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 import OrderTracking from "../components/OrderTracking";
 
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = "https://reet-riwaz-backend.onrender.com/api";
 
 export default function OrderHistory() {
   const { user, isLoaded } = useUser();

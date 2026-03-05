@@ -285,7 +285,7 @@ import { useCart } from "../context/CartContext";
 import { useUser } from "@clerk/clerk-react";
 import StitchingCostEstimator from "../components/StitchingCostEstimator";
 
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = "https://reet-riwaz-backend.onrender.com/api";
 
 export default function Checkout() {
   const navigate = useNavigate();

@@ -296,7 +296,7 @@
 
 //     const sendOrderEmail = async () => {
 //       try {
-//       await fetch("http://localhost:5000/api/order/confirm", {
+//       await fetch("https://reet-riwaz-backend.onrender.com/api/order/confirm", {
 //           method: "POST",
 //           headers: {
 //             "Content-Type": "application/json",

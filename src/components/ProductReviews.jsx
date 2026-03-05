@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useUser } from "@clerk/clerk-react";
 
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = "https://reet-riwaz-backend.onrender.com/api";
 
 export default function ProductReviews({ productId }) {
   const { user, isSignedIn } = useUser();

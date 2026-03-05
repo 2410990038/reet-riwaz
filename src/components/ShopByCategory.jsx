@@ -5,7 +5,7 @@ import SearchFilter from "./SearchFilter";
 import ProductReviews from "./ProductReviews";
 import { useWishlist } from "../context/WishlistContext";
 
-const BASE_URL = "http://localhost:5000/api";
+const BASE_URL = "https://reet-riwaz-backend.onrender.com/api";
 const SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
 
 function ShareButtons({ product }) {
