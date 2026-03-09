@@ -7,7 +7,7 @@ import {
   useClerk
 } from "@clerk/clerk-react";
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaShoppingCart, FaHeart } from "react-icons/fa";
 import { useWishlist } from "../context/WishlistContext";
 
@@ -20,7 +20,7 @@ export default function Navbar() {
   const [cartCount, setCartCount] = useState(0);
   const { wishlist } = useWishlist();
 
-  const isAdmin = user?.publicMetadata?.role === 'admin';
+  const isAdmin = user?.primaryEmailAddress?.emailAddress === "angelpreetk276@gmail.com";
 
   useEffect(() => {
     const updateCart = () => {
@@ -43,6 +43,14 @@ export default function Navbar() {
     return () => window.removeEventListener("cartUpdated", updateCart);
   }, []);
 
+  const goProtected = (path) => {
+    if (isSignedIn) {
+      navigate(path);
+    } else {
+      navigate("/sign-in");
+    }
+  };
+
   return (
     <nav className="flex justify-between items-center px-8 md:px-12 py-4 bg-[#fcf9eb]/90 backdrop-blur-md shadow-md fixed top-0 left-0 w-full z-30">
       <button
@@ -53,18 +61,18 @@ export default function Navbar() {
       </button>
 
       {/* 👗 Women's Collection Link */}
-      <Link
-        to="/women"
+      <button
+        onClick={() => goProtected("/women")}
         className="hidden md:flex items-center gap-1 text-sm font-semibold text-pink-600 border border-pink-300 px-4 py-2 rounded-full hover:bg-pink-50 hover:border-pink-500 transition"
       >
         👗 Women's Collection
-      </Link>
+      </button>
 
       <div className="flex items-center gap-4">
 
         {/* ❤️ Wishlist Button */}
         <button
-          onClick={() => navigate("/wishlist")}
+          onClick={() => goProtected("/wishlist")}
           className="relative w-10 h-10 bg-pink-500 text-white rounded-full flex justify-center items-center hover:bg-pink-600 transition hover:scale-110"
         >
           <FaHeart className="text-white text-xl" />
@@ -77,7 +85,7 @@ export default function Navbar() {
 
         {/* 🛒 Cart Button */}
         <button
-          onClick={() => navigate("/cart")}
+          onClick={() => goProtected("/cart")}
           className="relative w-10 h-10 bg-orange-500 text-white rounded-full flex justify-center items-center hover:bg-orange-600 transition hover:scale-110"
         >
           <FaShoppingCart className="text-white text-xl" />
