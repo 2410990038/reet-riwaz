@@ -19,8 +19,10 @@ export default function Navbar() {
   const { isSignedIn } = useAuth();
   const [cartCount, setCartCount] = useState(0);
   const { wishlist } = useWishlist();
+  
+``
 
-  const isAdmin = user?.primaryEmailAddress?.emailAddress === "angelpreetk276@gmail.com";
+  const isAdmin = user?.primaryEmailAddress?.emailAddress === "angelpreetk2315@gmail.com";
 
   useEffect(() => {
     const updateCart = () => {

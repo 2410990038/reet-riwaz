@@ -3,7 +3,7 @@ import { useUser } from "@clerk/clerk-react";
 import { useNavigate } from "react-router-dom";
 
 const BASE_URL = "https://reet-riwaz-backend.onrender.com/api";
-const ADMIN_EMAIL = "angelpreetk276@gmail.com";
+const ADMIN_EMAIL = "angelpreetk2315@gmail.com";
 
 export default function AdminPanel() {
   const { user, isLoaded } = useUser();
@@ -16,6 +16,7 @@ export default function AdminPanel() {
   const [loading, setLoading] = useState(true);
   const [newProduct, setNewProduct] = useState({ name: "", price: "", priceValue: "", rating: 4.5, desc: "", image: "", category: "women", stock: 10 });
   const [adminNotes, setAdminNotes] = useState({});
+  
 
   const adminEmail = user?.primaryEmailAddress?.emailAddress;
   const headers = { "Content-Type": "application/json", "admin-email": adminEmail || "" };
