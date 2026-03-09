@@ -1,5 +1,5 @@
 import emailjs from '@emailjs/browser';
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useUser } from "@clerk/clerk-react";
@@ -13,6 +13,7 @@ export default function Payment() {
   const [method, setMethod] = useState("cod");
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState("");
+  const orderPlacedRef = useRef(false);
 
   const amountToPay = Number(localStorage.getItem("amountToPay")) || 0;
 
@@ -33,14 +34,17 @@ export default function Payment() {
   }, [cart.length, navigate]);
 
   const handlePayNow = async () => {
+    if (orderPlacedRef.current) return;
+    orderPlacedRef.current = true;
     setProcessing(true);
     setError("");
 
     try {
-      // Build order payload
+      const customerEmail = user?.primaryEmailAddress?.emailAddress || checkoutData?.email || "";
+
       const orderData = {
         clerkUserId: user?.id || "guest",
-        userEmail: user?.primaryEmailAddress?.emailAddress || checkoutData?.email || "",
+        userEmail: customerEmail,
         items: cart.map((item) => ({
           productId: item.id,
           name: item.name,
@@ -55,7 +59,6 @@ export default function Payment() {
         totalAmount: amountToPay
       };
 
-      // Save to MongoDB
       const res = await fetch(`${BASE_URL}/orders/place`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -63,10 +66,8 @@ export default function Payment() {
       });
 
       const data = await res.json();
-
       if (!res.ok) throw new Error(data.message || "Order failed");
 
-      // Save to localStorage for confirmation page
       const orderForConfirmation = {
         id: data.order._id,
         items: cart,
@@ -79,23 +80,30 @@ export default function Payment() {
 
       localStorage.setItem("lastOrder", JSON.stringify(orderForConfirmation));
 
-      // Send confirmation email
-emailjs.send(
-  import.meta.env.VITE_EMAILJS_SERVICE_ID,
-  import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-  {
-    email: orderData.userEmail,
-    order_id: data.order._id,
-    total_amount: `₹${amountToPay.toLocaleString()}`,
-    payment_method: method,
-  },
-  import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-).catch(() => {}); // don't block if email fails
+      // Send email to CUSTOMER only once
+      if (customerEmail) {
+        emailjs.send(
+          import.meta.env.VITE_EMAILJS_SERVICE_ID,
+          import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+          {
+            to_email: customerEmail,
+            email: customerEmail,
+            customer_name: `${checkoutData?.firstName || ""} ${checkoutData?.lastName || ""}`.trim(),
+            order_id: data.order._id.slice(-8).toUpperCase(),
+            total_amount: `₹${amountToPay.toLocaleString()}`,
+            payment_method: method.toUpperCase(),
+            shipping_address: `${checkoutData?.address}, ${checkoutData?.city}, ${checkoutData?.state} - ${checkoutData?.pincode}`,
+            items: cart.map(i => `${i.name} x${i.qty || 1}`).join(", ")
+          },
+          import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+        ).catch((err) => console.error("Email error:", err));
+      }
 
-clearCart();
-navigate("/order-confirmation");
+      clearCart();
+      navigate("/order-confirmation");
 
     } catch (err) {
+      orderPlacedRef.current = false;
       setError(err.message || "Something went wrong. Please try again.");
       setProcessing(false);
     }
@@ -105,14 +113,11 @@ navigate("/order-confirmation");
     <div className="min-h-screen bg-[#fdfbe8] pt-24 pb-12">
       <div className="max-w-5xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        {/* Payment Methods */}
         <div className="lg:col-span-2 bg-white rounded-lg shadow-lg p-6">
           <h1 className="text-3xl font-bold mb-6">Payment</h1>
 
           {error && (
-            <div className="bg-red-100 text-red-700 px-4 py-3 rounded mb-4">
-              {error}
-            </div>
+            <div className="bg-red-100 text-red-700 px-4 py-3 rounded mb-4">{error}</div>
           )}
 
           <div className="space-y-4">
@@ -149,7 +154,7 @@ navigate("/order-confirmation");
             <button
               disabled={processing}
               onClick={handlePayNow}
-              className={`w-full mt-4 ${processing ? "bg-green-400" : "bg-green-600 hover:bg-green-700"} text-white py-3 rounded-lg font-bold transition`}
+              className={`w-full mt-4 ${processing ? "bg-green-400 cursor-not-allowed" : "bg-green-600 hover:bg-green-700"} text-white py-3 rounded-lg font-bold transition`}
             >
               {processing ? "Processing..." : `Pay ₹${amountToPay.toLocaleString()}`}
             </button>
@@ -163,7 +168,6 @@ navigate("/order-confirmation");
           </div>
         </div>
 
-        {/* Order Summary */}
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h2 className="text-2xl font-bold mb-6">Order Summary</h2>
 
