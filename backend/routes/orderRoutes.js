@@ -23,15 +23,41 @@
 // module.exports = router;
 
 
+// const express = require('express');
+// const router = express.Router();
+// const { placeOrder, getMyOrders, getUserOrders, getUserOrdersByUserId, getOrderById, cancelOrder } = require('../controllers/orderController');
+
+// router.post('/place', placeOrder);
+// router.get('/my/:clerkUserId', getMyOrders);
+// router.get('/user/id/:userId', getUserOrdersByUserId);
+// router.get('/user/:email', getUserOrders);
+// router.get('/:id', getOrderById);
+// router.put('/:id/cancel', cancelOrder);
+
+// module.exports = router;
+
 const express = require('express');
 const router = express.Router();
-const { placeOrder, getMyOrders, getUserOrders, getUserOrdersByUserId, getOrderById, cancelOrder } = require('../controllers/orderController');
+const { 
+  placeOrder, 
+  getMyOrders, 
+  getUserOrders,
+  getUserOrdersByUserId,
+  getOrderById, 
+  cancelOrder,
+  requestReturn,
+  updateReturnStatus,
+  getAllReturns
+} = require('../controllers/orderController');
 
 router.post('/place', placeOrder);
 router.get('/my/:clerkUserId', getMyOrders);
-router.get('/user/id/:userId', getUserOrdersByUserId);
 router.get('/user/:email', getUserOrders);
+router.get('/user/id/:userId', getUserOrdersByUserId);
+router.get('/returns/all', getAllReturns);
 router.get('/:id', getOrderById);
 router.put('/:id/cancel', cancelOrder);
+router.post('/:id/return', requestReturn);
+router.put('/:id/return-status', updateReturnStatus);
 
 module.exports = router;
