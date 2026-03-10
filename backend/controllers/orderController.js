@@ -247,7 +247,7 @@ const placeOrder = async (req, res) => {
     if (!items || items.length === 0) return res.status(400).json({ message: 'No items in order' });
 
     // ✅ Duplicate check — block same order within 15 seconds
-    const fifteenSecondsAgo = new Date(Date.now() - 15000);
+    const fifteenSecondsAgo = new Date(Date.now() - 30000);
     const existingOrder = await Order.findOne({
       clerkUserId: clerkUserId || 'guest',
       totalAmount,
