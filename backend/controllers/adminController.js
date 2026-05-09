@@ -48,7 +48,7 @@ const getAllProducts = async (req, res) => {
   }
 };
 
-// POST /api/admin/products - now includes stock
+// POST /api/admin/products
 const addProduct = async (req, res) => {
   try {
     const { name, price, priceValue, rating, desc, image, category, stock } = req.body;
@@ -70,7 +70,24 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-// PUT /api/admin/products/:id/stock - update stock
+// ✅ NEW: PUT /api/admin/products/:id - update full product including image
+const updateProduct = async (req, res) => {
+  try {
+    const { name, price, priceValue, rating, desc, image, category, stock } = req.body;
+    const inStock = stock > 0;
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      { name, price, priceValue, rating, desc, image, category, stock, inStock },
+      { new: true }
+    );
+    if (!product) return res.status(404).json({ message: 'Product not found' });
+    res.status(200).json({ message: 'Product updated', product });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
+// PUT /api/admin/products/:id/stock
 const updateStock = async (req, res) => {
   try {
     const { stock } = req.body;
@@ -102,4 +119,4 @@ const getStats = async (req, res) => {
   }
 };
 
-module.exports = { getAllOrders, updateOrderStatus, getAllProducts, addProduct, deleteProduct, updateStock, getStats };
+module.exports = { getAllOrders, updateOrderStatus, getAllProducts, addProduct, deleteProduct, updateStock, getStats, updateProduct };
