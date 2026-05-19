@@ -194,7 +194,7 @@ export default function AdminPanel() {
             {tab === "products" && (
               <div>
                 <div className="bg-white rounded-lg shadow p-6 mb-6">
-                  <h2 className="text-xl font-bold mb-4">? Add New Product</h2>
+                  <h2 className="text-xl font-bold mb-4"> Add New Product</h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <input
                       placeholder="Product Name *"
@@ -265,7 +265,7 @@ export default function AdminPanel() {
                 </div>
 
                 <div className="bg-white rounded-lg shadow p-6">
-                  <h2 className="text-xl font-bold mb-4">?? All Products ({products.length})</h2>
+                  <h2 className="text-xl font-bold mb-4"> All Products ({products.length})</h2>
                   {products.length === 0 ? (
                     <p className="text-gray-500">No products yet. Add your first product above!</p>
                   ) : (
