@@ -148,7 +148,7 @@ export default function AdminPanel() {
   return (
     <div className="min-h-screen bg-gray-100 pt-20">
       <div className="max-w-7xl mx-auto px-6">
-        <h1 className="text-3xl font-bold mb-6">??? Admin Panel</h1>
+        <h1 className="text-3xl font-bold mb-6">Admin Panel</h1>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           {[
@@ -288,7 +288,7 @@ export default function AdminPanel() {
                               onClick={() => handleDeleteProduct(p._id)}
                               className="w-full bg-red-500 text-white py-1.5 rounded hover:bg-red-600 text-xs font-semibold"
                             >
-                              ??? Delete
+                               Delete
                             </button>
                           </div>
                         </div>
