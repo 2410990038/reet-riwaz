@@ -203,7 +203,7 @@ export default function AdminPanel() {
                       className="border rounded px-3 py-2"
                     />
                     <input
-                      placeholder="Display Price (e.g. ?1,999) *"
+                      placeholder="Display Price (e.g. ₹1,999) *"
                       value={newProduct.price}
                       onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
                       className="border rounded px-3 py-2"
